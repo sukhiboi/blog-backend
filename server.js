@@ -1,11 +1,22 @@
 const express = require('express');
+const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
-const app = express();
+require('dotenv').config();
 
-app.use(express.json());
+const SessionsStore = require('./lib/sessionsStore');
+const authMiddleware = require('./src/middleware/authorizeUser');
+const authRouter = require('./src/routes/auth');
+const userRouter = require('./src/routes/user');
+
+const PORT = process.env.PORT || process.argv[2] || 5000;
+
+const app = express();
+app.use(cookieParser());
 app.use(morgan('dev'));
 
-app.get('/', (req, res) => res.end('hello world'));
+app.locals.sessionsStore = new SessionsStore();
+app.use('/auth', authRouter);
+app.use(authMiddleware);
+app.use('/user', userRouter);
 
-const PORT = 4000;
 app.listen(PORT, () => console.log(`server listening on ${PORT}`));
