@@ -1,11 +1,9 @@
 const axios = require('axios');
-const clientId = process.env.CLIENT_ID;
-const clientSecret = process.env.CLIENT_SECRET;
 
 const getGithubAccessToken = async function (code) {
   const OAuthDetails = {
-    client_id: clientId,
-    client_secret: clientSecret,
+    client_id: process.env.CLIENT_ID,
+    client_secret: process.env.CLIENT_SECRET,
     code,
   };
   const headers = { headers: { accept: 'application/json' } };
@@ -23,7 +21,7 @@ const getUserDetailsByAccessToken = function (accessToken) {
 };
 
 const authorizeUser = function (request, response) {
-  const url = `https://github.com/login/oauth/authorize?client_id=${clientId}`;
+  const url = `https://github.com/login/oauth/authorize?client_id=${process.env.CLIENT_ID}`;
   response.redirect(url);
 };
 
