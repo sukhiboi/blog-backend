@@ -5,8 +5,8 @@ const morgan = require('morgan');
 require('dotenv').config();
 
 const redis = require('redis');
-const RedisURL = 'redis://localhost:6379';
-const client = redis.createClient(process.env.RedisURL || RedisURL);
+const REDIS_URL = 'redis://localhost:6379';
+const client = redis.createClient(process.env.REDIS_URL || REDIS_URL);
 
 const SessionsStore = require('./lib/sessionsStore');
 const PostsStore = require('./src/postsStore');
