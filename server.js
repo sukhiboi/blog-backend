@@ -37,10 +37,10 @@ app.use((req, res, next) => {
   req.redisClient = client;
   next();
 });
-app.use('/auth', authRouter);
-app.use(authMiddleware);
-app.use('/user', userRouter);
-app.use('/post', PostRouter);
+app.use('/api/auth', authRouter);
+app.use('/api/*', authMiddleware);
+app.use('/api/user', userRouter);
+app.use('/api/post', PostRouter);
 app.get('/*', function (req, res) {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
