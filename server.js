@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
@@ -11,6 +12,7 @@ const userRouter = require('./src/routes/user');
 const PORT = process.env.PORT || process.argv[2] || 5000;
 
 const app = express();
+app.use(express.static(path.join(__dirname, 'build')));
 app.use(cookieParser());
 app.use(morgan('dev'));
 
@@ -18,5 +20,8 @@ app.locals.sessionsStore = new SessionsStore();
 app.use('/auth', authRouter);
 app.use(authMiddleware);
 app.use('/user', userRouter);
+app.get('/*', function (req, res) {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
 app.listen(PORT, () => console.log(`server listening on ${PORT}`));
