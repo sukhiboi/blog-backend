@@ -6,7 +6,10 @@ const { getUserDetailsByAccessToken } = require('./../auth/github.auth');
 router.get('/', (req, res) => {
   const sessionsStore = req.app.locals.sessionsStore;
   const session = sessionsStore.getSession(req.cookies.id);
-  getUserDetailsByAccessToken(session.accessToken).then(data => res.json(data));
+  getUserDetailsByAccessToken(session.accessToken).then(data => {
+    const { name, avatar_url, bio } = data;
+    res.json({ name, avatar_url, bio, isLoggedIn: true });
+  });
 });
 
 router.get('/logout', (req, res) => {
