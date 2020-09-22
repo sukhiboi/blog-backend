@@ -13,7 +13,7 @@ router.get('/logout', (req, res) => {
   const sessionsStore = req.app.locals.sessionsStore;
   sessionsStore.deleteSession(req.cookies.id);
   res.clearCookie('id');
-  res.redirect('/');
+  res.redirect(process.env.LOGIN_REDIRECT);
 });
 
 module.exports = router;
