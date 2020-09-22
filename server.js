@@ -5,10 +5,12 @@ const morgan = require('morgan');
 require('dotenv').config();
 
 const SessionsStore = require('./lib/sessionsStore');
+const PostsStore = require('./src/postsStore');
 const authMiddleware = require('./src/middleware/authorizeUser');
 const authRouter = require('./src/routes/auth');
 const userRouter = require('./src/routes/user');
 const PostRouter = require('./src/routes/posts');
+const postData = require('./posts.json');
 
 const PORT = process.env.PORT || process.argv[2] || 5000;
 
@@ -18,6 +20,7 @@ app.use(cookieParser());
 app.use(morgan('dev'));
 
 app.locals.sessionsStore = new SessionsStore();
+app.locals.postsStore = new PostsStore(postData, 2);
 app.use('/auth', authRouter);
 app.use(authMiddleware);
 app.use('/user', userRouter);
