@@ -3,7 +3,7 @@ const { assert } = require('chai');
 
 const fakeToken = '33f2t3g';
 
-describe('SessionStorage()', () => {
+describe('SessionStore()', () => {
   describe('#createNewSession()', () => {
     it('should give back the id of new session', () => {
       const store = new SessionsStore();

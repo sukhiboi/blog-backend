@@ -17,6 +17,7 @@ const PORT = process.env.PORT || process.argv[2] || 5000;
 const app = express();
 app.use(express.static(path.join(__dirname, 'build')));
 app.use(cookieParser());
+app.use(express.json());
 app.use(morgan('dev'));
 
 app.locals.sessionsStore = new SessionsStore();

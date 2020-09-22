@@ -12,4 +12,10 @@ router.get('/:id', (req, res) => {
   res.json(postsStore.getPost(req.params.id));
 });
 
+router.post('/add-new-post', (req, res) => {
+  const postsStore = req.app.locals.postsStore;
+  const id = postsStore.addNewPost(req.body);
+  res.send(`Added post - id${id}`);
+});
+
 module.exports = router;
