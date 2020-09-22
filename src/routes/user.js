@@ -16,6 +16,7 @@ router.get('/logout', (req, res) => {
   const sessionsStore = req.app.locals.sessionsStore;
   sessionsStore.deleteSession(req.cookies.id);
   res.clearCookie('id');
+  req.redisClient.set('sessionsStore', sessionsStore.toJSON());
   res.redirect(process.env.LOGIN_REDIRECT);
 });
 

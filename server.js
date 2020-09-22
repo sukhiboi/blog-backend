@@ -4,13 +4,17 @@ const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 require('dotenv').config();
 
+const redis = require('redis');
+const RedisURL = 'redis://localhost:6379';
+const client = redis.createClient(process.env.RedisURL || RedisURL);
+
 const SessionsStore = require('./lib/sessionsStore');
 const PostsStore = require('./src/postsStore');
+
 const authMiddleware = require('./src/middleware/authorizeUser');
 const authRouter = require('./src/routes/auth');
 const userRouter = require('./src/routes/user');
 const PostRouter = require('./src/routes/posts');
-const postData = require('./posts.json');
 
 const PORT = process.env.PORT || process.argv[2] || 5000;
 
@@ -20,8 +24,19 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(morgan('dev'));
 
-app.locals.sessionsStore = new SessionsStore();
-app.locals.postsStore = new PostsStore(postData, 2);
+client.get('sessionsStore', (err, data) => {
+  const sessions = JSON.parse(data) || [];
+  app.locals.sessionsStore = new SessionsStore(sessions);
+});
+client.get('postsStore', (err, data) => {
+  const posts = JSON.parse(data) || [];
+  app.locals.postsStore = new PostsStore(posts);
+});
+
+app.use((req, res, next) => {
+  req.redisClient = client;
+  next();
+});
 app.use('/auth', authRouter);
 app.use(authMiddleware);
 app.use('/user', userRouter);

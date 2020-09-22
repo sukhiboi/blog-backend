@@ -16,6 +16,7 @@ router.post('/add-new-post', (req, res) => {
   const postsStore = req.app.locals.postsStore;
   const id = postsStore.addNewPost(req.body);
   res.send(`Added post - id${id}`);
+  req.redisClient.set('postsStore', postsStore.toJSON());
 });
 
 module.exports = router;
