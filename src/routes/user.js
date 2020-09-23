@@ -7,7 +7,7 @@ router.get('/', (req, res) => {
   res.json({ ...user, isLoggedIn: true });
 });
 
-router.get('/:username', (req, res) => {
+router.get('/profile/:username', (req, res) => {
   const usersStore = req.app.locals.usersStore;
   const postsStore = req.app.locals.postsStore;
   const user = usersStore.getUser(req.params.username);
