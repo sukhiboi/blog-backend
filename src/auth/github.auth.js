@@ -17,7 +17,7 @@ const getUserDetailsByAccessToken = function (accessToken) {
   const options = { headers: { Authorization: `token ${accessToken}` } };
   return axios
     .get('https://api.github.com/user', options)
-    .then(({ data }) => data);
+    .then(({ data }) => ({ accessToken, data }));
 };
 
 const authorizeUser = function (request, response) {

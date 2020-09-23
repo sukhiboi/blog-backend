@@ -1,15 +1,10 @@
 const express = require('express');
 const router = express.Router();
 
-const { getUserDetailsByAccessToken } = require('./../auth/github.auth');
-
 router.get('/', (req, res) => {
   const sessionsStore = req.app.locals.sessionsStore;
-  const session = sessionsStore.getSession(req.cookies.id);
-  getUserDetailsByAccessToken(session.accessToken).then(data => {
-    const { name, avatar_url, bio } = data;
-    res.json({ name, avatar_url, bio, isLoggedIn: true });
-  });
+  const { user } = sessionsStore.getSession(req.cookies.id);
+  res.json({ ...user, isLoggedIn: true });
 });
 
 router.get('/logout', (req, res) => {
