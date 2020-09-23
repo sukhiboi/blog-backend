@@ -23,6 +23,13 @@ class PostStore {
     return post;
   }
 
+  getUserPosts(username) {
+    const posts = [];
+    for (let [key, value] of this.posts)
+      if (value.name === username) posts.unshift(value);
+    return posts;
+  }
+
   getAllPosts(username) {
     const posts = [];
     for (let [key, value] of this.posts) {

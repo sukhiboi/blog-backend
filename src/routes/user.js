@@ -7,6 +7,14 @@ router.get('/', (req, res) => {
   res.json({ ...user, isLoggedIn: true });
 });
 
+router.get('/:username', (req, res) => {
+  const usersStore = req.app.locals.usersStore;
+  const postsStore = req.app.locals.postsStore;
+  const user = usersStore.getUser(req.params.username);
+  const posts = postsStore.getUserPosts(req.params.username);
+  res.json({ user, posts });
+});
+
 router.get('/logout', (req, res) => {
   const sessionsStore = req.app.locals.sessionsStore;
   sessionsStore.deleteSession(req.cookies.id);

@@ -10,6 +10,7 @@ const client = redis.createClient(process.env.REDIS_URL || REDIS_URL);
 
 const SessionsStore = require('./lib/sessionsStore');
 const PostsStore = require('./src/postsStore');
+const UsersStore = require('./src/usersStore');
 
 const authMiddleware = require('./src/middleware/authorizeUser');
 const authRouter = require('./src/routes/auth');
@@ -31,6 +32,10 @@ client.get('sessionsStore', (err, data) => {
 client.get('postsStore', (err, data) => {
   const posts = JSON.parse(data) || [];
   app.locals.postsStore = new PostsStore(posts);
+});
+client.get('usersStore', (err, data) => {
+  const users = JSON.parse(data) || [];
+  app.locals.usersStore = new UsersStore(users);
 });
 
 app.use((req, res, next) => {
