@@ -12,7 +12,7 @@ router.get('/logout', (req, res) => {
   sessionsStore.deleteSession(req.cookies.id);
   res.clearCookie('id');
   req.redisClient.set('sessionsStore', sessionsStore.toJSON());
-  res.redirect(process.env.LOGIN_REDIRECT);
+  res.json({ isLoggedIn: false });
 });
 
 module.exports = router;
