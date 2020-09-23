@@ -39,6 +39,12 @@ app.use((req, res, next) => {
 });
 app.use('/api/auth', authRouter);
 app.use('/api/*', authMiddleware);
+app.use((req, res, next) => {
+  const sessionsStore = req.app.locals.sessionsStore;
+  const { user } = sessionsStore.getSession(req.cookies.id);
+  req.user = user;
+  next();
+});
 app.use('/api/user', userRouter);
 app.use('/api/post', PostRouter);
 app.get('/*', function (req, res) {

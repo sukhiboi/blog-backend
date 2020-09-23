@@ -11,13 +11,24 @@ class PostStore {
     return id;
   }
 
-  getPost(id) {
-    return this.posts.get(id);
+  deletePost(id) {
+    const post = this.posts.get(id);
+    this.posts.delete(id);
+    return post;
   }
 
-  getAllPosts() {
+  getPost(id, username) {
+    const post = this.posts.get(id);
+    if (post.name === username) return { ...post, isMyPost: true };
+    return post;
+  }
+
+  getAllPosts(username) {
     const posts = [];
-    for (let [key, value] of this.posts) posts.unshift(value);
+    for (let [key, value] of this.posts) {
+      if (value.name === username) posts.unshift({ ...value, isMyPost: true });
+      else posts.unshift(value);
+    }
     return posts;
   }
 
