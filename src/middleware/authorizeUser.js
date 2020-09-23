@@ -6,6 +6,7 @@ const authorizeUser = function (req, res, next) {
     res.end();
     return;
   }
+  req.user = session.user;
   next();
 };
 
