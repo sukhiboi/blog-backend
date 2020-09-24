@@ -4,7 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "nyc mocha",
+    "test": "(export NODE_ENV=test; nyc mocha)",
+    "dev-test": "(export NODE_ENV=test; mocha -w)",
     "start": "node server.js"
   },
   "repository": {
@@ -30,6 +31,7 @@
     "nyc": "^15.1.0",
     "redis": "^3.0.2",
     "sinon": "^9.0.3",
+    "supertest": "^4.0.2",
     "uuid": "^8.3.0"
   },
   "devDependencies": {}
