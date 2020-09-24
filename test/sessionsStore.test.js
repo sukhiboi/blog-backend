@@ -1,13 +1,21 @@
 const SessionsStore = require('../lib/sessionsStore');
-const { assert } = require('chai');
+const chai = require('chai');
+chai.use(require('chai-uuid'));
+const assert = chai.assert;
 
-const session = { accessToken: '33f2t3g' };
+const session = {
+  accessToken: '33f2t3g',
+  name: 'sukhdev',
+  imgURL: 'url',
+  bio: 'hello',
+};
 
 describe('SessionStore()', () => {
   describe('#createNewSession()', () => {
     it('should give back the id of new session', () => {
       const store = new SessionsStore();
       const id = store.createNewSession(session);
+      assert.uuid(id, 'v4');
       assert.deepStrictEqual(store.getSession(id), { id, ...session });
     });
   });
@@ -16,12 +24,14 @@ describe('SessionStore()', () => {
     it('should give back details of valid session', () => {
       const store = new SessionsStore();
       const id = store.createNewSession(session);
+      assert.uuid(id, 'v4');
       assert.deepStrictEqual(store.getSession(id), { id, ...session });
     });
 
     it('should fail to retrieving a invalid session', () => {
       const store = new SessionsStore();
-      store.createNewSession(session);
+      const id = store.createNewSession(session);
+      assert.uuid(id, 'v4');
       assert.isUndefined(store.getSession(4));
     });
   });
@@ -30,6 +40,7 @@ describe('SessionStore()', () => {
     it('should delete a valid session', () => {
       const store = new SessionsStore();
       const id = store.createNewSession(session);
+      assert.uuid(id, 'v4');
       assert.deepStrictEqual(store.getSession(id), { id, ...session });
       store.deleteSession(id);
       assert.isUndefined(store.getSession(id));
@@ -38,8 +49,20 @@ describe('SessionStore()', () => {
     it('should not delete any other session if give id is invalid', () => {
       const store = new SessionsStore();
       const id = store.createNewSession(session);
+      assert.uuid(id, 'v4');
       store.deleteSession(2);
       assert.deepStrictEqual(store.getSession(id), { id, ...session });
+    });
+  });
+
+  describe('toJSON()', () => {
+    it('should return the JSON string of the sessions', () => {
+      const store = new SessionsStore();
+      const id = store.createNewSession(session);
+      assert.uuid(id, 'v4');
+      assert.deepStrictEqual(store.getSession(id), { id, ...session });
+      const json = JSON.parse(store.toJSON());
+      assert.deepStrictEqual(json, [[id, { ...session, id }]]);
     });
   });
 });

@@ -1,4 +1,4 @@
-class UserStore {
+class UsersStore {
   constructor(users) {
     this.users = new Map(users);
   }
@@ -19,4 +19,4 @@ class UserStore {
   }
 }
 
-module.exports = UserStore;
+module.exports = UsersStore;
