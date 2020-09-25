@@ -19,12 +19,12 @@ router.get('/callback', (req, res) => {
     .then(({ data, accessToken }) => {
       const user = { name: data.name, imgURL: data.avatar_url, bio: data.bio };
       res.cookie('id', sessionsStore.createNewSession({ accessToken, user }));
-      client.set('sessionsStore', sessionsStore.toJSON(), (err, res) => {
+      client.set('sessionsStore', sessionsStore.toJSON(), (err, data) => {
         if (usersStore.getUser(user.name)) {
           return res.redirect(process.env.LOGIN_REDIRECT);
         }
         usersStore.addNewUser(user);
-        client.set('usersStore', usersStore.toJSON(), (err, res) => {
+        client.set('usersStore', usersStore.toJSON(), (err, data) => {
           res.redirect(process.env.LOGIN_REDIRECT);
         });
       });
