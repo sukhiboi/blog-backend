@@ -12,8 +12,9 @@ jobs:
   include:
     - stage: 'Test'
       script: npm test
-    - stage: 'Deploy'
+    - stage: 'Build'
       script: ./scripts/build.sh
+    - stage: 'Deploy'
       deploy:
         provider: heroku
         api_key:
