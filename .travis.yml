@@ -5,11 +5,9 @@ os:
   - linux
 env:
   - NODE_ENV=test
+services:
+  - redis-server
 install:
-  - wget http://download.redis.io/releases/redis-6.0.8.tar.gz
-  - tar xzf redis-6.0.8.tar.gz
-  - make redis-6.0.8
   - npm install
 script:
-  - sh ./redis-6.0.8/src/redis-server.sh
   - npm test
