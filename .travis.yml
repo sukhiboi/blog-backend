@@ -11,5 +11,5 @@ install:
   - make redis-6.0.8
   - npm install
 script:
-  - ./redis-6.0.8/src/redis-server
+  - sh ./redis-6.0.8/src/redis-server.sh
   - npm test
