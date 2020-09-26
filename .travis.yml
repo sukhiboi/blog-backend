@@ -19,4 +19,3 @@ jobs:
         app: sukhiboi-blog
         run: restart
         skip_cleanup: true
-        strategy: git
