@@ -28,3 +28,5 @@ cp -R ./* to ..;
 #deleting backend
 cd ..;
 rm -rf blog-backend;
+
+ls

@@ -10,9 +10,8 @@ install:
   - npm install
 jobs:
   include:
-    - stage: 'Build'
-      script: ./scripts/build.sh
     - stage: 'Deploy'
+      script: ./scripts/build.sh
       deploy:
         provider: heroku
         api_key:
