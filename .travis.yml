@@ -1,0 +1,9 @@
+language: node
+os:
+- osx
+- linux
+env: test
+service: 
+- redis-server start
+install: npm install
+script: npm test

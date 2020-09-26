@@ -4,7 +4,7 @@ const app = require('./../app');
 const axios = require('axios');
 const { assert } = require('chai');
 
-describe('Auth Router()', () => {
+describe.skip('Auth Router()', () => {
   let axiosPostStub;
   let axiosGetStub;
 
