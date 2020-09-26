@@ -6,9 +6,10 @@ os:
 env:
   - NODE_ENV=test
 install:
-  - brew install redis
+  - wget http://download.redis.io/releases/redis-6.0.8.tar.gz
+  - tar xzf redis-6.0.8.tar.gz
+  - make redis-6.0.8
   - npm install
 script:
-  - brew services start redis
+  - ./redis-6.0.8/src/redis-server
   - npm test
-  - brew services stop redis
