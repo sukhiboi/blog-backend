@@ -15,14 +15,14 @@ router.post('/add-new-post', (req, res) => {
   const postsStore = req.app.locals.postsStore;
   const id = postsStore.addNewPost({ ...req.body, name: req.user.name });
   res.send(`Added post - id${id}`);
-  req.redisClient.set('postsStore', postsStore.toJSON());
+  req.app.locals.redisClient.set('postsStore', postsStore.toJSON());
 });
 
 router.post('/delete-post', (req, res) => {
   const postsStore = req.app.locals.postsStore;
   const { id } = postsStore.deletePost(req.body.id);
   res.send(`Deleted post - id${id}`);
-  req.redisClient.set('postsStore', postsStore.toJSON());
+  req.app.locals.redisClient.set('postsStore', postsStore.toJSON());
 });
 
 module.exports = router;

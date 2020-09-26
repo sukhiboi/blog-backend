@@ -1,10 +1,10 @@
-// const request = require('supertest');
+const request = require('supertest');
 const sinon = require('sinon');
-// const app = require('./../app');
+const app = require('./../app');
 const axios = require('axios');
 const { assert } = require('chai');
 
-describe.skip('Auth Router()', () => {
+describe('Auth Router()', () => {
   let axiosPostStub;
   let axiosGetStub;
 
@@ -31,7 +31,11 @@ describe.skip('Auth Router()', () => {
         .get('/api/auth/login')
         .expect(302)
         .expect('Location', /\/github.com\/login\/oauth\//)
-        .expect('Location', /1234/, done);
+        .expect('Location', /1234/)
+        .end(() => {
+          app.locals.redisClient.end(true);
+          done();
+        });
     });
   });
 
@@ -44,7 +48,11 @@ describe.skip('Auth Router()', () => {
           assert.ok(axiosGetStub.calledOnce);
         })
         .expect(302)
-        .expect('Location', /localhost:3000/, done);
+        .expect('Location', /localhost:3000/)
+        .end(() => {
+          app.locals.redisClient.end(true);
+          done();
+        });
     });
   });
 });

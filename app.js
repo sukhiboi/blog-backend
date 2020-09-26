@@ -26,6 +26,8 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(morgan('dev'));
 
+app.locals.redisClient = client;
+
 client.get('sessionsStore', (err, data) => {
   const sessions = JSON.parse(data) || [];
   app.locals.sessionsStore = new SessionsStore(sessions);
@@ -39,10 +41,6 @@ client.get('usersStore', (err, data) => {
   app.locals.usersStore = new UsersStore(users);
 });
 
-app.use((req, res, next) => {
-  req.redisClient = client;
-  next();
-});
 app.use('/api/auth', authRouter);
 app.use('/api/*', authMiddleware);
 app.use('/api/user', userRouter);

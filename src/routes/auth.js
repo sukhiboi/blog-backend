@@ -12,7 +12,7 @@ router.get('/login', authorizeUser);
 router.get('/callback', (req, res) => {
   const sessionsStore = req.app.locals.sessionsStore;
   const usersStore = req.app.locals.usersStore;
-  const client = req.redisClient;
+  const client = req.app.locals.redisClient;
   const code = req.query.code;
   getGithubAccessToken(code)
     .then(getUserDetailsByAccessToken)

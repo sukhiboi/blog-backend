@@ -19,7 +19,7 @@ router.get('/logout', (req, res) => {
   const sessionsStore = req.app.locals.sessionsStore;
   sessionsStore.deleteSession(req.cookies.id);
   res.clearCookie('id');
-  req.redisClient.set('sessionsStore', sessionsStore.toJSON());
+  req.app.locals.redisClient.set('sessionsStore', sessionsStore.toJSON());
   res.json({ isLoggedIn: false });
 });
 
