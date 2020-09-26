@@ -30,5 +30,3 @@ cd ..;
 rm -rf blog-backend;
 
 rm -rf node_modules;
-
-tree;
