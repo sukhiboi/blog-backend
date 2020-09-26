@@ -1,19 +1,19 @@
 language: node_js
 node_js: lts/*
 os:
-- linux
+  - linux
 env:
-- NODE_ENV=test
+  - NODE_ENV=test
 services:
-- redis-server
+  - redis-server
 install:
-- npm install
+  - npm install
 jobs:
   include:
-    - stage: "Test"
-    script: npm test
-    - stage: "Build"
-    script: ./scripts/build.sh
+    - stage: 'Test'
+      script: npm test
+    - stage: 'Build'
+      script: ./scripts/build.sh
 deploy:
   provider: heroku
   api_key:
