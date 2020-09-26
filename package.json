@@ -4,8 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "(export NODE_ENV=test; nyc mocha)",
-    "dev-test": "(export NODE_ENV=test; mocha -w)",
+    "test": "nyc mocha",
+    "dev-test": "mocha -w",
     "start": "node server.js"
   },
   "repository": {
