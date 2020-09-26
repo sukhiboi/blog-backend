@@ -1,9 +1,12 @@
-language: node
+language: node_js
+node_js: lts/*
 os:
 - osx
 - linux
-env: test
+env: 
+- NODE_ENV=test
 service: 
 - redis-server start
 install: npm install
-script: npm test
+script: 
+- npm test
