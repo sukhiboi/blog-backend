@@ -23,7 +23,7 @@ npm test;
 rm -rf node_modules;
 
 #cloning backend to root
-cp -R ./* to ..;
+cp -R ./* ..;
 
 #deleting backend
 cd ..;
