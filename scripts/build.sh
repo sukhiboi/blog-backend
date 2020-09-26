@@ -20,13 +20,19 @@ git clone https://github.com/sukhiboi/blog-backend.git;
 cd blog-backend;
 npm install;
 npm test;
+echo 'ran tests'
 rm -rf node_modules;
+echo 'delete modules'
 
 #cloning backend to root
+echo 'copying build and server to root'
 cp -R ./* ..;
+ls
 
 #deleting backend
 cd ..;
+pwd
 rm -rf blog-backend;
+echo 'deleting backend'
 
 rm -rf node_modules;
