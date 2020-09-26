@@ -29,4 +29,6 @@ cp -R ./* ..;
 cd ..;
 rm -rf blog-backend;
 
-ls
+rm -rf node_modules;
+
+tree;
