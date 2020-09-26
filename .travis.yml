@@ -1,21 +1,22 @@
 language: node_js
 node_js: lts/*
 os:
-  - linux
+- linux
 env:
-  - NODE_ENV=test
-services:
-  - redis-server
+- NODE_ENV=test
 install:
-  - npm install
+- rm -rf public src package.json package-lock.json
+services:
+- redis-server
 jobs:
   include:
-    - stage: 'Deploy'
-      script: ./scripts/build.sh
-      deploy:
-        provider: heroku
-        api_key:
-          secure: Q/y6+3Nq5yc8m3yPZm7FBeo9EKSauzccx0u9ky5cTHcdi90vgJKyWb0bn7r+8hgKgcFpvmLfSbE3Jjc95m35Cjn+FutKiyToZCEfRUwIXjEPbEL7Q08P0RMn89XfRx1gP0YHJtkpRjKIr/7l1KvYyzh8Fpyot1UkG42N+9ILBRlOksoexYsrNOo4n1VYkBE6w6D3pQYiSFZsz0EG2y7aizR4m64U3mc9qI+iKZ5yQsXFofEAvDLZodRm83lf5lqQC6C/rx/IuavsR5JZYAXGexGjUzqL4Rv2K8+29OSPOz3/      KIYVcHX4O77MzrphMSngXvsAgJkvQk9sOCY6EXx7lFy2vbvm2Vq4q60a3nLWKxPM7Hs2Hc6EkZTlLZ9ao3BNRCQcMPOVxJJI2HaI95wq5G5pfda20tA0RCBaTdr1vmPpBhk2JPnSfz8ZG+32RsAJtjk2+wUlYgYVXBud8+E+BpPXyNhCuVVeUnEJW2zOEFXX9l+VxDVzz4z/9I85qbfVDBjkAVZ9UNoPEvHQLj2KnY57zV6gEBDGuGUOYT9dDCLDLUmQDoP+yzKQmhIS    +PuKz2u3WpRFhUZtjC1zwYGheBUHJyAqtbdv/ZN9wK9gHLt2P8W6PIL9cRTw3q2nCNkEUn5X83Ez1A1Ol4fp6vMpRaeJBp5l0r5VkGUnH5G1Ct4=
-        app: sukhiboi-blog
-        run: restart
-        skip_cleanup: true
+  - stage: Deploy
+    script:
+    - "./scripts/build.sh"
+    deploy:
+      provider: heroku
+      api_key:
+        secure: VmGpzWwqSJbvsjqM0QLVIqxbW637ZHSre91qTcJA52H28mIPicJz3YycKNDXUiC5kH41OF+x3hY+uXOlpTvi9qNgxOO5qHOJnTviy1jkCH3jJ+iTi81lwEPoJnNIV+Cq1PeA1APM4QhD7Y83HmCa+sUzBjSzc68DjcJkkx5VTW7/krv7uCpKa+mFn0Ipi9nrXwQxLNRuyNmwpAADa6Xuuz7QTpQsawLRjfIKyC9ITZh+WxV3hyVAht7P9CF+0ByL9rlwY45A7zQ/H+dOD0l4By395+JjLqja5pxwOPRL5CW5sMLFU74e7bQAqtqfJ0cOnU5NsTdOAd+gWIHZfGxA3WA/lVBbv2adEyD+oGsbSq2vVFrse7x/BlXpRu+jdlcBVC7tFYmyFrhdSIZSEK8FGsNwEwdsT3Pdj771eNsqQ1V+km2ld6LsCI+1tP/5vosl+YgMqJ2Sl1JzzvqKLfSasBu/PC+FB21cy0bRkXvQGuuCSvPKoYKuIYh3vMmlKFQALXf6F6f9OzYtNCp89ZUO+kORHczN5YxjFbZP4WKkXx2tDpdIR4R/ZjKKdf1DI9O8WERWQhwC+frNlAZ/FRPow0fk4i6MBBSTI8G/7xVogj4715frHRq2k0gZxpW95biI8eF4CXtRBY+I2JwUvU9a5sHdqC5zPzd0w8UR+GPX5Qo=
+      skip_cleanup: true
+      app: sukhiboi-blog
+      run: restart
