@@ -35,7 +35,7 @@ class Database {
       this.client('posts')
         .join('users', 'posts.user_id', '=', 'users.user_id')
         .select('*')
-        .where('users.id', '=', user_id)
+        .where('users.user_id', '=', user_id)
         .then(resolve)
         .catch(reject);
     });
