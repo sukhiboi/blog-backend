@@ -5,7 +5,7 @@ class Sessions {
 
   createSession(user) {
     return new Promise((resolve, reject) => {
-      this.client.set(user.user_id, JSON.stringify(user), (err, reply) => {
+      this.client.set(`${user.user_id}`, JSON.stringify(user), (err, reply) => {
         if (err) reject(err);
         resolve(reply);
       });
@@ -14,7 +14,7 @@ class Sessions {
 
   getSession(id) {
     return new Promise((resolve, reject) => {
-      this.client.get(id, (err, reply) => {
+      this.client.get(`${id}`, (err, reply) => {
         if (err) reject(err);
         resolve(JSON.parse(reply));
       });
@@ -23,7 +23,7 @@ class Sessions {
 
   deleteSession(id) {
     return new Promise((resolve, reject) => {
-      this.client.del(id, (err, reply) => {
+      this.client.del(`${id}`, (err, reply) => {
         if (err) reject(err);
         resolve(reply);
       });
