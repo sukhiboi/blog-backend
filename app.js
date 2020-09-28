@@ -5,6 +5,16 @@ const morgan = require('morgan');
 const envPath = process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env';
 require('dotenv').config({ path: envPath });
 
+const knex = require('knex')({
+  client: 'pg',
+  connection: {
+    host: process.env.PG_HOST,
+    user: process.env.USER,
+    password: process.env.PASSWORD,
+    database: process.env.PG_DATABASE,
+  },
+});
+
 const redis = require('redis');
 const REDIS_URL = 'redis://localhost:6379';
 const client = redis.createClient(process.env.REDIS_URL || REDIS_URL, {
@@ -12,13 +22,13 @@ const client = redis.createClient(process.env.REDIS_URL || REDIS_URL, {
 });
 
 const SessionsStore = require('./lib/sessionsStore');
-const PostsStore = require('./src/postsStore');
 const UsersStore = require('./src/usersStore');
 
 const authMiddleware = require('./src/middleware/authorizeUser');
 const authRouter = require('./src/routes/auth');
 const userRouter = require('./src/routes/user');
 const PostRouter = require('./src/routes/posts');
+const Database = require('./src/database');
 
 const app = express();
 app.use(express.static(path.join(__dirname, 'build')));
@@ -27,14 +37,11 @@ app.use(express.json());
 app.use(morgan('dev'));
 
 app.locals.redisClient = client;
+app.locals.db = new Database(knex);
 
 client.get('sessionsStore', (err, data) => {
   const sessions = JSON.parse(data) || [];
   app.locals.sessionsStore = new SessionsStore(sessions);
-});
-client.get('postsStore', (err, data) => {
-  const posts = JSON.parse(data) || [];
-  app.locals.postsStore = new PostsStore(posts);
 });
 client.get('usersStore', (err, data) => {
   const users = JSON.parse(data) || [];
