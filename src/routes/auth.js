@@ -25,8 +25,8 @@ router.get('/callback', async (req, res) => {
 
   const user_id = await db.getUser(data.login).then(([user]) => {
     if (!user) {
-      const savedUserDetails = db.saveUser(githubUser);
-      return savedUserDetails[0].user_id;
+      const savedUserDetails = await db.saveUser(githubUser);
+      return Promise.resolve(savedUserDetails[0].user_id);  
     }
     return Promise.resolve(user.user_id);
   });
