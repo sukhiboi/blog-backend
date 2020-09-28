@@ -6,12 +6,7 @@ const morgan = require('morgan');
 const envPath = process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env';
 require('dotenv').config({ path: envPath });
 
-const knex = require('knex')({
-  client: 'pg',
-  connection: process.env.DATABASE_URL,
-  searchPath: ['knex', 'public'],
-});
-
+const knex = require('./knexfile');
 const redis = require('redis');
 const client = redis.createClient(process.env.REDIS_URL, {
   db: process.env.DB,
