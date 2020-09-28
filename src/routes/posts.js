@@ -9,11 +9,11 @@ router.get('/:id', (req, res) => {
   req.app.locals.db.getPost(req.params.id).then(([data]) => res.json(data));
 });
 
-router.post('/add-new-post', async (req, res) => {
-  const session = await req.app.locals.sessions.getSession(req.cookies.id);
-  req.app.locals.db
-    .savePost({ ...req.body, user_id: session.user_id })
-    .then(() => res.end());
+router.post('/add-new-post', (req, res) => {
+  req.app.locals.sessions.getSession(req.cookies.id).then(({ user_id }) => {
+    console.log({ ...req.body, user_id });
+    req.app.locals.db.savePost({ ...req.body, user_id }).then(() => res.end());
+  });
 });
 
 router.post('/delete-post', (req, res) => {
