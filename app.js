@@ -2,6 +2,7 @@ const path = require('path');
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
+
 const envPath = process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env';
 require('dotenv').config({ path: envPath });
 
@@ -16,8 +17,7 @@ const knex = require('knex')({
 });
 
 const redis = require('redis');
-const REDIS_URL = 'redis://localhost:6379';
-const client = redis.createClient(process.env.REDIS_URL || REDIS_URL, {
+const client = redis.createClient(process.env.REDIS_URL, {
   db: process.env.DB,
 });
 
@@ -38,9 +38,9 @@ app.use(morgan('dev'));
 app.locals.redisClient = client;
 app.locals.db = new Database(knex);
 
-client.get('sessionsStore', (err, data) => {
+client.get('sessions', (err, data) => {
   const sessions = JSON.parse(data) || [];
-  app.locals.sessionsStore = new SessionsStore(sessions);
+  app.locals.sessions = new SessionsStore(sessions);
 });
 
 app.use('/api/auth', authRouter);

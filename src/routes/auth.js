@@ -9,35 +9,31 @@ const {
 
 router.get('/login', authorizeUser);
 
-router.get('/callback', (req, res) => {
-  const sessionsStore = req.app.locals.sessionsStore;
+router.get('/callback', async (req, res) => {
+  const sessions = req.app.locals.sessions;
+  const db = req.app.locals.db;
   const client = req.app.locals.redisClient;
   const code = req.query.code;
-  getGithubAccessToken(code)
-    .then(getUserDetailsByAccessToken)
-    .then(({ data, accessToken }) => {
-      const githubUser = {
-        user_name: data.login,
-        img_url: data.avatar_url,
-        bio: data.bio,
-      };
-      req.app.locals.db
-        .getUser(githubUser.user_name)
-        .then(([user]) => {
-          if (user) return Promise.resolve(user.user_id);
-          else return req.app.locals.db.saveUser(githubUser);
-        })
-        .then(user_id => {
-          const sessionId = sessionsStore.createNewSession({
-            accessToken,
-            user_name: githubUser.user_name,
-            user_id,
-          });
-          res.cookie('id', sessionId);
-          client.set('sessionsStore', sessionsStore.toJSON());
-          res.redirect(process.env.LOGIN_REDIRECT);
-        });
-    });
+
+  const accessToken = await getGithubAccessToken(code);
+  const { data } = await getUserDetailsByAccessToken(accessToken);
+  const githubUser = {
+    user_name: data.login,
+    img_url: data.avatar_url,
+    bio: data.bio,
+  };
+  const user_id = await db.getUser(data.login).then(([user]) => {
+    if (!user) return db.saveUser(githubUser);
+    return Promise.resolve(user.user_id);
+  });
+  const sId = sessions.createNewSession({
+    accessToken,
+    user_name: data.login,
+    user_id,
+  });
+  res.cookie('id', sId);
+  client.set('sessions', sessions.toJSON());
+  res.redirect(process.env.LOGIN_REDIRECT);
 });
 
 module.exports = router;
