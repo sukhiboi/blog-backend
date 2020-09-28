@@ -25,8 +25,8 @@ router.get('/callback', async (req, res) => {
 
   const user_id = await db.getUser(data.login).then(([user]) => {
     if (!user) {
-      const user = db.saveUser(githubUser);
-      return user[0].user_id;
+      const savedUserDetails = db.saveUser(githubUser);
+      return savedUserDetails[0].user_id;
     }
     return Promise.resolve(user.user_id);
   });
@@ -36,7 +36,7 @@ router.get('/callback', async (req, res) => {
     user_name: data.login,
     user_id,
   });
-  
+
   res.cookie('id', user_id);
   res.redirect(process.env.LOGIN_REDIRECT);
 });
