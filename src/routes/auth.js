@@ -11,23 +11,32 @@ router.get('/login', authorizeUser);
 
 router.get('/callback', (req, res) => {
   const sessionsStore = req.app.locals.sessionsStore;
-  const usersStore = req.app.locals.usersStore;
   const client = req.app.locals.redisClient;
   const code = req.query.code;
   getGithubAccessToken(code)
     .then(getUserDetailsByAccessToken)
     .then(({ data, accessToken }) => {
-      const user = { name: data.name, imgURL: data.avatar_url, bio: data.bio };
-      res.cookie('id', sessionsStore.createNewSession({ accessToken, user }));
-      client.set('sessionsStore', sessionsStore.toJSON(), (err, data) => {
-        if (usersStore.getUser(user.name)) {
-          return res.redirect(process.env.LOGIN_REDIRECT);
-        }
-        usersStore.addNewUser(user);
-        client.set('usersStore', usersStore.toJSON(), (err, data) => {
+      const githubUser = {
+        user_name: data.login,
+        img_url: data.avatar_url,
+        bio: data.bio,
+      };
+      req.app.locals.db
+        .getUser(githubUser.user_name)
+        .then(([user]) => {
+          if (user) return Promise.resolve(user.user_id);
+          else return req.app.locals.db.saveUser(githubUser);
+        })
+        .then(user_id => {
+          const sessionId = sessionsStore.createNewSession({
+            accessToken,
+            user_name: githubUser.user_name,
+            user_id,
+          });
+          res.cookie('id', sessionId);
+          client.set('sessionsStore', sessionsStore.toJSON());
           res.redirect(process.env.LOGIN_REDIRECT);
         });
-      });
     });
 });
 

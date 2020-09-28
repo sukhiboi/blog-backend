@@ -30,11 +30,41 @@ class Database {
     });
   }
 
+  getUserPosts(user_id) {
+    return new Promise((resolve, reject) => {
+      this.client('posts')
+        .join('users', 'posts.user_id', '=', 'users.user_id')
+        .select('*')
+        .where('users.id', '=', user_id)
+        .then(resolve)
+        .catch(reject);
+    });
+  }
+
   getAllPosts() {
     return new Promise((resolve, reject) => {
       this.client('posts')
         .join('users', 'posts.user_id', '=', 'users.user_id')
         .select('*')
+        .then(resolve)
+        .catch(reject);
+    });
+  }
+
+  saveUser(user) {
+    return new Promise((resolve, reject) => {
+      this.client('users')
+        .insert(user, ['user_id'])
+        .then(resolve)
+        .catch(reject);
+    });
+  }
+
+  getUser(user_name) {
+    return new Promise((resolve, reject) => {
+      this.client('users')
+        .select('*')
+        .where('user_name', '=', user_name)
         .then(resolve)
         .catch(reject);
     });

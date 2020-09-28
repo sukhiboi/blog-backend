@@ -3,16 +3,17 @@ const router = express.Router();
 
 router.get('/', (req, res) => {
   const sessionsStore = req.app.locals.sessionsStore;
-  const { user } = sessionsStore.getSession(req.cookies.id);
+  const { user_name } = sessionsStore.getSession(req.cookies.id);
+  const user = req.app.locals.db.getUser(user_name);
   res.json({ ...user, isLoggedIn: true });
 });
 
 router.get('/profile/:username', (req, res) => {
-  const usersStore = req.app.locals.usersStore;
-  const postsStore = req.app.locals.postsStore;
-  const user = usersStore.getUser(req.params.username);
-  const posts = postsStore.getUserPosts(req.params.username);
-  res.json({ user, posts });
+  req.app.locals.db.getUser(req.params.username).then(user => {
+    req.app.locals.db.getUserPosts(user.user_id).then(posts => {
+      res.json({ user, posts });
+    });
+  });
 });
 
 router.get('/logout', (req, res) => {
