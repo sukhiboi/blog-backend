@@ -46,6 +46,7 @@ class Database {
       this.client('posts')
         .join('users', 'posts.user_id', '=', 'users.user_id')
         .select('*')
+        .orderBy('published_on', 'desc')
         .then(resolve)
         .catch(reject);
     });
