@@ -21,13 +21,13 @@ const client = redis.createClient(process.env.REDIS_URL, {
   db: process.env.DB,
 });
 
-const SessionsStore = require('./lib/sessionsStore');
+const Sessions = require('./src/sessions');
+const Database = require('./src/database');
 
 const authMiddleware = require('./src/middleware/authorizeUser');
 const authRouter = require('./src/routes/auth');
 const userRouter = require('./src/routes/user');
 const PostRouter = require('./src/routes/posts');
-const Database = require('./src/database');
 
 const app = express();
 app.use(express.static(path.join(__dirname, 'build')));
@@ -35,13 +35,8 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(morgan('dev'));
 
-app.locals.redisClient = client;
+app.locals.sessions = new Sessions(client);
 app.locals.db = new Database(knex);
-
-client.get('sessions', (err, data) => {
-  const sessions = JSON.parse(data) || [];
-  app.locals.sessions = new SessionsStore(sessions);
-});
 
 app.use('/api/auth', authRouter);
 app.use('/api/*', authMiddleware);

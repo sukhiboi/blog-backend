@@ -1,12 +1,12 @@
-const authorizeUser = function (req, res, next) {
-  const sessions = req.app.locals.sessions;
-  const session = sessions.getSession(req.cookies.id);
-  if (!session) {
+const authorizeUser = async (req, res, next) => {
+  try {
+    await req.app.locals.sessions.getSession(req.cookies.id);
+    next();
+  } catch {
     res.sendStatus(401);
     res.end();
     return;
   }
-  next();
 };
 
 module.exports = authorizeUser;

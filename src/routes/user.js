@@ -1,10 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
-router.get('/', (req, res) => {
-  const sessions = req.app.locals.sessions;
-  const { user_name } = sessions.getSession(req.cookies.id);
-  const user = req.app.locals.db.getUser(user_name);
+router.get('/', async (req, res) => {
+  const session = await req.app.locals.sessions.getSession(req.cookies.id);
+  const user = await req.app.locals.db.getUser(session.user_name);
   res.json({ ...user, isLoggedIn: true });
 });
 
@@ -17,11 +16,10 @@ router.get('/profile/:username', (req, res) => {
 });
 
 router.get('/logout', (req, res) => {
-  const sessions = req.app.locals.sessions;
-  sessions.deleteSession(req.cookies.id);
-  res.clearCookie('id');
-  req.app.locals.redisClient.set('sessions', sessions.toJSON());
-  res.json({ isLoggedIn: false });
+  req.app.locals.sessions.deleteSession(req.cookies.id).then(() => {
+    res.clearCookie('id');
+    res.json({ isLoggedIn: false });
+  });
 });
 
 module.exports = router;
