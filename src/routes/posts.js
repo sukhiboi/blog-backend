@@ -11,7 +11,6 @@ router.get('/:id', (req, res) => {
 
 router.post('/add-new-post', (req, res) => {
   req.app.locals.sessions.getSession(req.cookies.id).then(({ user_id }) => {
-    console.log({ ...req.body, user_id });
     req.app.locals.db.savePost({ ...req.body, user_id }).then(() => res.end());
   });
 });
