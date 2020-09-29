@@ -16,7 +16,7 @@ router.post('/add-new-post', (req, res) => {
 });
 
 router.post('/delete-post', (req, res) => {
-  req.app.locals.db.deletePost(req.params.id).then(() => res.end());
+  req.app.locals.db.deletePost(req.body.id).then(() => res.end());
 });
 
 module.exports = router;
