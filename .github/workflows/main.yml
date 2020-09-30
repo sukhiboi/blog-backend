@@ -10,4 +10,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Build react and backend
-        run: ./scripts/build.sh
+      - run: ./scripts/build.sh
+      - uses: onekiloparsec/heroku-node-deploy-subfolder@v1.0.4
+        with:
+          api_key: ${{secrets.HEROKU_API_KEY}}
+          email: '41sukhdevsingh@gmail.com'
+          app_name: 'sukhiboi-blog'
