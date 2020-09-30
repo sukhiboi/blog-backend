@@ -14,5 +14,4 @@ jobs:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: 'sukhiboi-blog'
           heroku_email: '41sukhdevsingh@gmail.com'
-      - name: Build react and backend
-        run: ./scripts/build.sh
+          run: ./scripts/build.sh
