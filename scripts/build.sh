@@ -32,4 +32,4 @@ rm -rf node_modules;
 rm -rf backend;
 rm -rf frontend;
 
-ls -al;
+git push heroku master;
