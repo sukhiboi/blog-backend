@@ -31,5 +31,3 @@ echo 'Cleaning';
 rm -rf node_modules;
 rm -rf backend;
 rm -rf frontend;
-
-git push heroku master;
