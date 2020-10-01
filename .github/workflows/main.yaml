@@ -3,7 +3,7 @@ on:
   push:
     branches: [master]
 jobs:
-  build:
+  Deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -21,6 +21,8 @@ jobs:
           repository: sukhiboi/blog-frontend
           path: frontend
       - name: Building frontend
+        env:
+          REACT_APP_LOGIN_REDIRECT: /api/auth/login
         run: |
           cd frontend
           npm install
@@ -28,7 +30,7 @@ jobs:
           mv build ../backend/
           cd ..
           rm -rf frontend
-      - name: Deploy to Heroku
+      - name: Deploying to Heroku
         run: |
           cd backend
           git config --global user.email "41sukhdevaingh@gmail.com"
