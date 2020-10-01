@@ -1,0 +1,40 @@
+name: React Deployment
+on:
+  push:
+    branches: [master]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 1000
+          repository: sukhiboi/blog-backend
+          path: backend
+      - name: Testing Backend
+        run: |
+          cd backend
+          npm install
+          npm test
+      - uses: actions/checkout@v2
+        with:
+          repository: sukhiboi/blog-frontend
+          path: frontend
+      - name: Building frontend
+        run: |
+          cd frontend
+          npm install
+          npm run build
+          mv build ../backend/
+          cd ..
+          rm -rf frontend
+      - name: Deploy to Heroku
+        run: |
+          cd backend
+          git config --global user.email "41sukhdevaingh@gmail.com"
+          git config --global user.name "sukhiboi"
+          git remote add heroku https://heroku:${{secrets.HEROKU_API_KEY}}@git.heroku.com/githubactions.git
+          rm -rf coverage scripts;
+          git add .;
+          git commit -m "new commit"
+          git push heroku master --set-upstream -f;
