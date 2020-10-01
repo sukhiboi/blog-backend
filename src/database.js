@@ -35,6 +35,7 @@ class Database {
       this.client('posts')
         .join('users', 'posts.user_id', '=', 'users.user_id')
         .select('title', 'published_on', 'users.user_id', 'user_name', 'id')
+        .orderBy('published_on', 'desc')
         .where('users.user_id', '=', user_id)
         .then(resolve)
         .catch(reject);
