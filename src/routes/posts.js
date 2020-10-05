@@ -17,7 +17,7 @@ router.post('/add-new-post', (req, res) => {
 
 router.post('/update-post', (req, res) => {
   req.app.locals.db
-    .updatePost(req.body.updatedPost, req.body.id)
+    .updatePost(req.body.id, req.body.updatedPost)
     .then(() => res.end());
 });
 
