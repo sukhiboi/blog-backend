@@ -15,6 +15,12 @@ router.post('/add-new-post', (req, res) => {
   });
 });
 
+router.post('/update-post', (req, res) => {
+  req.app.locals.db
+    .updatePost(req.body.updatedPost, req.body.id)
+    .then(() => res.end());
+});
+
 router.post('/delete-post', (req, res) => {
   req.app.locals.db.deletePost(req.body.id).then(() => res.end());
 });

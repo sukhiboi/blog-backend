@@ -36,6 +36,43 @@ describe('Database', () => {
     });
   });
 
+  describe('updatePost', () => {
+    it('should update the post with new details', async () => {
+      const fakeUpdate = fake.resolves('OK');
+      const fakeWhere = fake.returns({ update: fakeUpdate });
+      const client = fake.returns({ where: fakeWhere });
+      const updatedPost = { title: 'new Title', content: 'new Content' };
+      const db = new Database(client);
+      const res = await db.updatePost(1, updatedPost);
+      assert.strictEqual(res, 'OK');
+      assert.strictEqual(client.callCount, 1);
+      assert.ok(client.calledWith('posts'));
+      assert.strictEqual(fakeWhere.callCount, 1);
+      assert.ok(fakeWhere.calledWith('id', '=', 1));
+      assert.strictEqual(fakeUpdate.callCount, 1);
+      assert.ok(fakeUpdate.calledWith(updatedPost));
+    });
+
+    it('should reject if error occurs', async () => {
+      const fakeUpdate = fake.rejects(error);
+      const fakeWhere = fake.returns({ update: fakeUpdate });
+      const client = fake.returns({ where: fakeWhere });
+      const updatedPost = { title: 'new Title', content: 'new Content' };
+      const db = new Database(client);
+      try {
+        await db.updatePost(1, updatedPost);
+      } catch (e) {
+        assert.strictEqual(e, error);
+        assert.strictEqual(client.callCount, 1);
+        assert.ok(client.calledWith('posts'));
+        assert.strictEqual(fakeWhere.callCount, 1);
+        assert.ok(fakeWhere.calledWith('id', '=', 1));
+        assert.strictEqual(fakeUpdate.callCount, 1);
+        assert.ok(fakeUpdate.calledWith(updatedPost));
+      }
+    });
+  });
+
   describe('deletePost', () => {
     it('should resolve after deleting post', async () => {
       const fakeDel = fake.resolves('OK');

@@ -7,6 +7,10 @@ class Database {
     return this.client('posts').insert(post);
   }
 
+  updatePost(id, updatedPost) {
+    return this.client('posts').where('id', '=', id).update(updatedPost);
+  }
+
   deletePost(id) {
     return this.client('posts').where('id', '=', id).del();
   }
