@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
-router.get('/all', (req, res) => {
-  req.app.locals.db.getAllPosts().then(data => res.json(data));
+router.post('/all', (req, res) => {
+  const searchPhrase = req.body.search || '';
+  req.app.locals.db.getAllPosts(searchPhrase).then(data => res.json(data));
 });
 
 router.get('/:id', (req, res) => {

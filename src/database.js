@@ -30,10 +30,11 @@ class Database {
       .where('users.user_id', '=', user_id);
   }
 
-  getAllPosts() {
+  getAllPosts(searchPhrase) {
     return this.client('posts')
       .join('users', 'posts.user_id', '=', 'users.user_id')
       .select('title', 'published_on', 'users.user_id', 'user_name', 'id')
+      .where('title', 'ilike', `%${searchPhrase}%`)
       .orderBy('published_on', 'desc');
   }
 

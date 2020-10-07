@@ -219,11 +219,12 @@ describe('Database', () => {
   describe('getAllPosts', () => {
     it('should resolve all posts', async () => {
       const fakeOrderBy = fake.resolves('OK');
-      const fakeSelect = fake.returns({ orderBy: fakeOrderBy });
+      const fakeWhere = fake.returns({ orderBy: fakeOrderBy });
+      const fakeSelect = fake.returns({ where: fakeWhere });
       const fakeJoin = fake.returns({ select: fakeSelect });
       const client = fake.returns({ join: fakeJoin });
       const db = new Database(client);
-      const res = await db.getAllPosts(1);
+      const res = await db.getAllPosts('home');
       assert.strictEqual(res, 'OK');
       assert.strictEqual(client.callCount, 1);
       assert.ok(client.calledWith('posts'));
@@ -241,18 +242,21 @@ describe('Database', () => {
           'id'
         )
       );
+      assert.strictEqual(fakeWhere.callCount, 1);
+      assert.ok(fakeWhere.calledWith('title', 'ilike', '%home%'));
       assert.strictEqual(fakeOrderBy.callCount, 1);
       assert.ok(fakeOrderBy.calledWith('published_on', 'desc'));
     });
 
     it('should reject if error occurs', async () => {
       const fakeOrderBy = fake.resolves('OK');
-      const fakeSelect = fake.returns({ orderBy: fakeOrderBy });
+      const fakeWhere = fake.returns({ orderBy: fakeOrderBy });
+      const fakeSelect = fake.returns({ where: fakeWhere });
       const fakeJoin = fake.returns({ select: fakeSelect });
       const client = fake.returns({ join: fakeJoin });
       const db = new Database(client);
       try {
-        await db.getAllPosts(1);
+        await db.getAllPosts('home');
       } catch (e) {
         assert.strictEqual(client.callCount, 1);
         assert.ok(client.calledWith('posts'));
@@ -270,6 +274,8 @@ describe('Database', () => {
             'id'
           )
         );
+        assert.strictEqual(fakeWhere.callCount, 1);
+        assert.ok(fakeWhere.calledWith('title', 'ilike', '%home%'));
         assert.strictEqual(fakeOrderBy.callCount, 1);
         assert.ok(fakeOrderBy.calledWith('published_on', 'desc'));
       }
