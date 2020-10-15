@@ -31,6 +31,20 @@ app.locals.sessions = new Sessions(client);
 app.locals.db = new Database(knex);
 
 app.use('/api/auth', authRouter);
+app.post('/api/post/all', (req, res) => {
+  const searchPhrase = req.body.search || '';
+  req.app.locals.db.getAllPosts(searchPhrase).then(data => res.json(data));
+});
+app.get('/api/post/:id', (req, res) => {
+  req.app.locals.db.getPost(req.params.id).then(([data]) => res.json(data));
+});
+app.get('/api/user/profile/:username', (req, res) => {
+  req.app.locals.db.getUser(req.params.username).then(([user]) => {
+    req.app.locals.db.getUserPosts(user.user_id).then(posts => {
+      res.json({ user, posts });
+    });
+  });
+});
 app.use('/api/*', authMiddleware);
 app.use('/api/user', userRouter);
 app.use('/api/post', PostRouter);
