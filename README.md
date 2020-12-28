@@ -12,7 +12,7 @@ Knowledge House is a simple website where you can write a blog post and share it
 
 ## Features
 
-Knowledge House comes with a list of features that helps you to easily share your knowledge with the community
+Knowledge House comes with a list of features that helps you to easily share your knowledge with the community.
 
 - Let's you create a post and publish it
 - Let's you edit a published post
