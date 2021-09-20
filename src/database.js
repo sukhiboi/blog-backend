@@ -42,6 +42,10 @@ class Database {
     return this.client('users').insert(user, ['user_id']);
   }
 
+  saveExternalUser({username, password}) {
+    return this.client('users').insert({'user_name': username, password})
+  }
+
   getUser(user_name) {
     return this.client('users').select('*').where('user_name', '=', user_name);
   }

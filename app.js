@@ -9,9 +9,7 @@ require('dotenv').config({ path: envPath });
 const knexConfig = require('./knexfile');
 const knex = require('knex')(knexConfig);
 const redis = require('redis');
-const client = redis.createClient(process.env.REDIS_URL, {
-  db: process.env.DB,
-});
+const client = redis.createClient();
 
 const Sessions = require('./src/sessions');
 const Database = require('./src/database');
@@ -29,6 +27,29 @@ app.use(morgan('dev'));
 
 app.locals.sessions = new Sessions(client);
 app.locals.db = new Database(knex);
+
+app.post('/api/register', (req, res) => {
+  req.app.locals.db.saveExternalUser(req.body).then(() => {
+    req.app.locals.db.getUser(req.body.username).then(([user]) => {
+      res.json({ ...user, isLoggedIn: true });
+    });
+  });
+})
+
+app.post('/api/login', (req, res) => {
+  req.app.locals.db.getUser(req.body.username).then(([user]) => {
+    if (req.body.password === user.password) {
+      req.app.locals.sessions.createSession({
+        user_name: user.user_name,
+        user_id: user.user_id,
+      });
+
+      res.cookie('id', user.user_id);
+      res.json({...user, isLoggedIn: true});
+    }
+  })
+});
+
 
 app.use('/api/auth', authRouter);
 app.post('/api/post/all', (req, res) => {

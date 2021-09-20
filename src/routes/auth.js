@@ -7,7 +7,7 @@ const {
   getUserDetailsByAccessToken,
 } = require('./../auth/github.auth');
 
-router.get('/login', authorizeUser);
+router.get('/github-login', authorizeUser);
 
 router.get('/callback', async (req, res) => {
   const sessions = req.app.locals.sessions;
